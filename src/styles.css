@@ -1,0 +1,31 @@
+/* src/styles.css – Tailwind v4 (zero‑config) */
+@import "tailwindcss";
+
+:root{
+    --radius: 14px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.05), 0 1px 1px rgba(0,0,0,.03);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+    --ring: 0 0 0 3px rgba(59,130,246,.12);
+  }
+  
+  * { outline: none; }
+  :focus-visible { box-shadow: var(--ring); border-color: rgba(59,130,246,.5) !important; }
+  
+  .card-surface { background: #fff; border-radius: var(--radius); border: 1px solid rgb(226 232 240); box-shadow: var(--shadow-sm); }
+  .card-muted   { background: #f8fafc; border-radius: var(--radius); border: 1px solid rgb(226 232 240); }
+  
+  .btn-base { border-radius: calc(var(--radius) - 6px); font-size: 0.875rem; padding: .5rem .875rem; }
+  .btn-solid { background: rgb(37 99 235); color: #fff; }
+  .btn-solid:hover { filter: brightness(.95); }
+  .btn-soft { background: rgb(248 250 252); }
+  .btn-soft:hover { background: rgb(241 245 249); }
+  
+  .badge { border-radius: 999px; font-size: .75rem; padding: .125rem .5rem; display: inline-flex; align-items: center; gap: .375rem; }
+  .badge--info{ background: #e0f2fe; color:#0369a1 }
+  .badge--warn{ background: #fef3c7; color:#a16207 }
+  .badge--danger{ background: #fee2e2; color:#991b1b }
+  .badge--success{ background: #dcfce7; color:#166534 }
+  .badge--default{ background: #eef2f7; color:#334155 }
+  
+  .table-row:hover { background: #f8fafc; }
+  
