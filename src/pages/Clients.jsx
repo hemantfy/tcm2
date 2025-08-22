@@ -16,14 +16,16 @@ const Clients = () => {
   };
 
   return (
-    <div className="p-6">
-       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold text-blue-600">Clients</h1>
+    <div className="space-y-6 fade-in">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Clients</h1>
+        <p className="text-sm text-slate-500">Manage client information and relationships.</p>
+      </div>
         <Button onClick={() => setShowForm(true)}>Add Client</Button>
       </div>
-      <p className="mt-2 text-gray-700">Manage client information and relationships.</p>
-      
-      <Card className="mt-4">
+     
+      <Card>
         <CardBody className="p-0">
           <Table>
             <THead headers={["Name", "Contact", "Email"]} />
@@ -48,7 +50,7 @@ const Clients = () => {
       </Card>
 
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center fade-in">
           <ClientForm onAdd={handleAdd} onCancel={() => setShowForm(false)} />
         </div>
       )}

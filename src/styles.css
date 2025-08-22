@@ -14,7 +14,7 @@
   .card-surface { background: #fff; border-radius: var(--radius); border: 1px solid rgb(226 232 240); box-shadow: var(--shadow-sm); }
   .card-muted   { background: #f8fafc; border-radius: var(--radius); border: 1px solid rgb(226 232 240); }
   
-  .btn-base { border-radius: calc(var(--radius) - 6px); font-size: 0.875rem; padding: .5rem .875rem; }
+  .btn-base { border-radius: calc(var(--radius) - 6px); font-size: 0.875rem; padding: .5rem .875rem;transition: all .2s ease-in-out; }
   .btn-solid { background: rgb(37 99 235); color: #fff; }
   .btn-solid:hover { filter: brightness(.95); }
   .btn-soft { background: rgb(248 250 252); }
@@ -28,4 +28,11 @@
   .badge--default{ background: #eef2f7; color:#334155 }
   
   .table-row:hover { background: #f8fafc; }
-  
+  html { scroll-behavior: smooth; }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(0.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in { animation: fade-in .4s ease-out forwards; }
