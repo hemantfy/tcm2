@@ -1,6 +1,7 @@
-export default function Card({ className = "", muted = false, children, as:Comp="div" }) {
+export default function Card({ className = "", muted = false, children, as = "div" }) {
+    const Component = as;
     const base = muted ? "card-muted" : "card-surface";
-    return <Comp className={`${base} ${className}`}>{children}</Comp>;
+    return <Component className={`${base} ${className}`}>{children}</Component>;
   }
   
   export function CardHeader({ title, subtitle, right }) {

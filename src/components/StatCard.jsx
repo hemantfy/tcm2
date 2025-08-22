@@ -1,4 +1,4 @@
-import Card, { CardBody } from "src/ui/Card.jsx";
+import Card, { CardBody } from "../ui/Card.jsx";
 
 export default function StatCard({ label, value, tone }) {
   const toneRing = tone === "warn" ? "ring-amber-100" :

@@ -4,9 +4,13 @@ import Sidebar from "./layout/Sidebar.jsx";
 import StatCard from "./components/StatCard.jsx";
 import TaskTable from "./components/TaskTable.jsx";
 import tasksSeed from "./data/sampleTasks.js";
+import Clients from "./pages/Clients.jsx";
+import Employees from "./pages/Employees.jsx";
+import Documents from "./pages/Documents.jsx";
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [page, setPage] = useState("dashboard");
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [priority, setPriority] = useState("all");
@@ -37,12 +41,11 @@ export default function App() {
     alert("New Task");
   }
 
-  return (
-    <div className="min-h-screen bg-slate-100 text-slate-900">
-      <Topbar onToggleSidebar={() => setSidebarOpen(v => !v)} />
-      <div className="flex">
-        <Sidebar open={sidebarOpen} setStatus={setStatus} setPriority={setPriority} />
-        <main className="flex-1 p-4 md:p-6 lg:p-8">
+  let content;
+    switch (page) {
+     case "dashboard":
+      content = (
+        <>
           {/* Title + primary action */}
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -124,7 +127,28 @@ export default function App() {
           <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
             <TaskTable rows={tasks} />
           </div>
-        </main>
+          </>
+      );
+      break;
+    case "clients":
+      content = <Clients />;
+      break;
+    case "employees":
+      content = <Employees />;
+      break;
+    case "documents":
+      content = <Documents />;
+      break;
+    default:
+      content = null;
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-100 text-slate-900">
+      <Topbar onToggleSidebar={() => setSidebarOpen(v => !v)} />
+      <div className="flex">
+        <Sidebar open={sidebarOpen} current={page} navigate={setPage} />
+        <main className="flex-1 p-4 md:p-6 lg:p-8">{content}</main>
       </div>
     </div>
   );

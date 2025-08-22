@@ -1,5 +1,5 @@
 import Badge from "../ui/Badge.jsx";
-import Card, { CardBody } from "./ui/Card.jsx";
+import Card, { CardBody } from "../ui/Card.jsx";
 import { Table, THead, TBody, TR } from "../ui/Table.jsx";
 
 const toneByStatus = s =>
