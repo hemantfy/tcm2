@@ -50,7 +50,7 @@ const Clients = () => {
       </Card>
 
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 m-0 overflow-y-auto fade-in">
           <ClientForm onAdd={handleAdd} onCancel={() => setShowForm(false)} />
         </div>
       )}
