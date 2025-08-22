@@ -3,7 +3,6 @@ import Topbar from "./layout/Topbar.jsx";
 import Sidebar from "./layout/Sidebar.jsx";
 import StatCard from "./components/StatCard.jsx";
 import TaskTable from "./components/TaskTable.jsx";
-import tasksSeed from "./data/sampleTasks.js";
 import Clients from "./pages/Clients.jsx";
 import Employees from "./pages/Employees.jsx";
 import Documents from "./pages/Documents.jsx";
@@ -14,9 +13,10 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [priority, setPriority] = useState("all");
+  const [tasks] = useState([]);
 
-  const tasks = useMemo(() => {
-    return tasksSeed
+  const filteredTasks = useMemo(() => {
+    return tasks
       .filter(t =>
         !query
           ? true
@@ -26,16 +26,15 @@ export default function App() {
       )
       .filter(t => (status === "all" ? true : t.status === status))
       .filter(t => (priority === "all" ? true : t.priority === priority));
-  }, [query, status, priority]);
+    }, [tasks, query, status, priority]);
 
   const kpis = useMemo(() => {
-    const total = tasksSeed.length;
-    const open = tasksSeed.filter(t => t.status !== "done").length;
-    const overdue = tasksSeed.filter(t => t.overdue).length;
-    const doneThisWeek = tasksSeed.filter(t => t.status === "done" && t.doneThisWeek).length;
+    const total = tasks.length;
+    const open = tasks.filter(t => t.status !== "done").length;
+    const overdue = tasks.filter(t => t.overdue).length;
+    const doneThisWeek = tasks.filter(t => t.status === "done" && t.doneThisWeek).length;
     return { total, open, overdue, doneThisWeek };
-  }, []);
-
+  }, [tasks]);
   function onNewTask() {
     // TODO: open your create-task modal/drawer
     alert("New Task");
@@ -125,7 +124,7 @@ export default function App() {
 
           {/* Tasks Table */}
           <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <TaskTable rows={tasks} />
+          <TaskTable rows={filteredTasks} />
           </div>
           </>
       );
