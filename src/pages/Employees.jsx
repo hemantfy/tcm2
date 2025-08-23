@@ -1,61 +1,57 @@
 import React, { useState } from 'react';
-import Button from '../ui/Button.jsx';
-import Card, { CardBody } from '../ui/Card.jsx';
-import { Table, THead, TBody, TR } from '../ui/Table.jsx';
-import sampleEmployees from '../data/sampleEmployees.js';
-import EmployeeForm from '../components/EmployeeForm.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const Employees = () => {
-  const [employees, setEmployees] = useState(sampleEmployees);
-  const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
+  const [employees] = useState([
+    { id: 1, name: 'Alice Johnson', contact: '555-111-2222', email: 'alice.johnson@example.com', role: 'Manager' },
+    { id: 2, name: 'Bob Williams', contact: '555-333-4444', email: 'bob.williams@example.com', role: 'Developer' }
+  ]);
 
-  const handleAdd = (employee) => {
-    const id = employees.length ? employees[employees.length - 1].id + 1 : 1;
-    setEmployees([...employees, { ...employee, id }]);
-    setShowForm(false);
+  const handleAddEmployee = () => {
+    navigate('/add-employees');
   };
 
   return (
-    <>
-    <div className="space-y-6 fade-in">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="max-w-7xl mx-auto">
+      <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Employees</h1>
-          <p className="text-sm text-slate-500">View and manage employee records.</p>
+          <h1 className="text-3xl font-semibold text-gray-900 mb-2">Employees</h1>
+          <p className="text-gray-600">View and manage employee records.</p>
         </div>
-        <Button onClick={() => setShowForm(true)}>Add Employee</Button>
+        <button 
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          onClick={handleAddEmployee}
+        >
+          Add Employee
+        </button>
       </div>
-      <Card>
-          <CardBody className="p-0">
-            <Table>
-              <THead headers={["Name", "Contact", "Email", "Role"]} />
-              <TBody>
-                {employees.map((e) => (
-                  <TR key={e.id}>
-                    <td className="font-medium">{e.firstName} {e.lastName}</td>
-                    <td className="text-slate-600">{e.contact}</td>
-                    <td className="text-slate-600">{e.email}</td>
-                    <td className="text-slate-600">{e.role}</td>
-                  </TR>
+
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Name</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Contact</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Role</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {employees.map((employee) => (
+                <tr key={employee.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/employees/${employee.id}`)}>
+                  <td className="px-6 py-4 text-sm text-gray-900">{employee.name}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{employee.contact}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{employee.email}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{employee.role}</td>
+                </tr>
               ))}
-                {employees.length === 0 && (
-                  <TR>
-                    <td colSpan={4} className="px-4 py-12 text-center text-slate-500">
-                      No employees available.
-                    </td>
-                  </TR>
-                )}
-              </TBody>
-            </Table>
-          </CardBody>
-        </Card>
+            </tbody>
+          </table>
         </div>
-      {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 overflow-y-auto fade-in">
-          <EmployeeForm onAdd={handleAdd} onCancel={() => setShowForm(false)} />
-        </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 

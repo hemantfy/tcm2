@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default function Sidebar({ open, current = "dashboard", navigate }) {
   const Item = ({ id, icon, label }) => (
     <button
@@ -6,7 +8,7 @@ export default function Sidebar({ open, current = "dashboard", navigate }) {
         text-gray-600 hover:text-blue-600 hover:bg-blue-50
         ${current === id ? "bg-blue-100 text-blue-700" : ""}
         ${open ? "" : "justify-center"}`}
-      title={open ? undefined : label} // tooltip when collapsed
+      title={open ? undefined : label}
     >
       {icon}
       {open && <span className="text-sm font-medium">{label}</span>}
@@ -22,12 +24,10 @@ export default function Sidebar({ open, current = "dashboard", navigate }) {
         text-gray-700
       `}
     >
-      {/* top cluster only — no "PAGES" header */}
       <div className="h-full flex flex-col pt-4 px-3 gap-2">
         <Item id="dashboard" label="Dashboard" icon={<i className="i-lucide-layout-dashboard" />} />
         <Item id="clients"   label="Clients"    icon={<i className="i-lucide-users" />} />
         <Item id="employees" label="Employees"  icon={<i className="i-lucide-badge" />} />
-        <Item id="documents" label="Documents"  icon={<i className="i-lucide-files" />} />
       </div>
     </aside>
   );
