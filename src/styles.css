@@ -8,6 +8,11 @@
     --ring: 0 0 0 3px rgba(59,130,246,.12);
   }
   
+  body {
+    background: #f9fafb;
+    color: #1f2937;
+  }
+  
   * { outline: none; }
   :focus-visible { box-shadow: var(--ring); border-color: rgba(59,130,246,.5) !important; }
   

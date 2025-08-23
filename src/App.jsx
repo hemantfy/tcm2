@@ -143,7 +143,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900">
+    <div className="min-h-screen bg-gray-50 text-gray-800">
       <Topbar onToggleSidebar={() => setSidebarOpen(v => !v)} />
       <div className="flex">
         <Sidebar open={sidebarOpen} current={page} navigate={setPage} />
