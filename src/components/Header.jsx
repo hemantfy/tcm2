@@ -3,16 +3,32 @@ import { useState } from "react";
 
 const Header = ({ onToggleSidebar }) => {
   const [showProfile, setShowProfile] = useState(false);
+  const profileRef = useRef(null);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowProfile(false);
+      }
+    };
+
+    if (showProfile) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProfile]);
   return (
-     <header className="sticky top-4 z-40 mx-4 mt-4 rounded-full bg-white/80 backdrop-blur shadow-md">
+    <header className="sticky top-4 z-40 mx-4 mt-4 rounded-full bg-white/80 backdrop-blur shadow-md">
       <div className="flex items-center gap-3 px-4 py-2">
         <button
           onClick={onToggleSidebar}
-          className="p-2 rounded-full border border-gray-200 hover:bg-gray-100"
+          className="rounded-full border border-gray-200 p-2 hover:bg-gray-100"
           aria-label="Toggle sidebar"
         >
-          <svg
+         <svg
             viewBox="0 0 24 24"
             className="h-5 w-5"
             fill="none"
@@ -28,10 +44,10 @@ const Header = ({ onToggleSidebar }) => {
         </div>
 
         <div className="ml-auto flex items-center gap-3">
-          <span className="text-sm text-gray-500 hidden md:block">
+          <span className="hidden text-sm text-gray-500 md:block">
             Welcome, Administrator
           </span>
-          <div className="relative">
+          <div className="relative" ref={profileRef}>
             <button
               onClick={() => setShowProfile((prev) => !prev)}
               className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white"
@@ -58,7 +74,7 @@ const Header = ({ onToggleSidebar }) => {
             )}
           </div>
         </div>
-        </div>
+      </div>
     </header>
   );
 };
