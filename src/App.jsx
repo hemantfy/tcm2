@@ -11,6 +11,7 @@ import './App.css';
 import EmployeeForm from './forms/EmployeeForm';
 import ClientProfile from "./pages/ClientProfile";
 import EmployeeProfile from "./pages/EmployeeProfile";
+import ManageProfile from "./pages/ManageProfile";
 
 const AppContent = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -51,7 +52,8 @@ const AppContent = () => {
             <Route path="/add-employees" element={<EmployeeForm />} />
             <Route path="/documents" element={<div className="p-8 text-center text-gray-500">Documents page coming soon...</div>} />
             <Route path="/taskform" element={<TaskForm />} />
-
+            <Route path="/manage-profile" element={<ManageProfile />} />
+            
           </Routes>
         </main>
       </div>

@@ -1,5 +1,7 @@
 import React from 'react';
 
+const iconCls = "h-5 w-5";
+
 const DashboardIcon = () => (
   <svg
     className={iconCls}

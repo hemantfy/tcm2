@@ -1,9 +1,12 @@
 // src/components/Header.jsx
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ onToggleSidebar }) => {
   const [showProfile, setShowProfile] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const profileRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -63,10 +66,19 @@ const Header = ({ onToggleSidebar }) => {
                     AD
                   </div>
                   <p className="mt-2 font-medium text-gray-700">Administrator</p>
-                  <button className="mt-4 w-full rounded-md bg-blue-500 px-4 py-1 text-white hover:bg-blue-600">
+                  <button
+                    className="mt-4 w-full rounded-md bg-blue-500 px-4 py-1 text-white hover:bg-blue-600"
+                    onClick={() => {
+                      navigate("/manage-profile");
+                      setShowProfile(false);
+                    }}
+                  >
                     Manage Profile
                   </button>
-                  <button className="mt-2 w-full rounded-md bg-red-500 px-4 py-1 text-white hover:bg-red-600">
+                  <button
+                    className="mt-2 w-full rounded-md bg-red-500 px-4 py-1 text-white hover:bg-red-600"
+                    onClick={() => setShowLogoutConfirm(true)}
+                  >
                     Logout
                   </button>
                 </div>
@@ -75,6 +87,31 @@ const Header = ({ onToggleSidebar }) => {
           </div>
         </div>
       </div>
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="rounded-lg bg-white p-6 shadow-lg">
+            <p className="mb-4 text-gray-700">Are you sure you want to log out?</p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  // Perform actual logout logic here
+                  navigate("/");
+                }}
+              >
+                Logout
+              </button>
+              <button
+                className="rounded-md bg-gray-200 px-4 py-2 hover:bg-gray-300"
+                onClick={() => setShowLogoutConfirm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
