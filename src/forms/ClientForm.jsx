@@ -34,7 +34,7 @@ export default function ClientForm() {
       createdDate: new Date().toISOString().split('T')[0]
     };
     
-    onAdd(client);
+    console.log(client);
     setForm({
       firstName: "",
       lastName: "",

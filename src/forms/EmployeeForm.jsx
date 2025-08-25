@@ -33,7 +33,7 @@ export default function EmployeeForm() {
       createdDate: new Date().toISOString().split('T')[0]
     };
     
-    onAdd(employee);
+    console.log(employee);
     setForm({
       firstName: "",
       lastName: "",

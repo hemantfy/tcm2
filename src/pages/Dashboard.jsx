@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 
 const Dashboard = () => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, _setTasks] = useState([]);
   const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [priorityFilter, setPriorityFilter] = useState('All Priorities');
   const [searchQuery, setSearchQuery] = useState('');
