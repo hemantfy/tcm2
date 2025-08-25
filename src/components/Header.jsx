@@ -1,5 +1,5 @@
 // src/components/Header.jsx
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const Header = ({ onToggleSidebar }) => {
   const [showProfile, setShowProfile] = useState(false);
