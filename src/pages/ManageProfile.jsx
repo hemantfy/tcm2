@@ -14,52 +14,61 @@ const ManageProfile = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-    <h2 className="mb-6 text-2xl font-semibold text-gray-700">Manage Profile</h2>
-    <div className="rounded-lg bg-white shadow-md overflow-hidden">
-      <div className="flex flex-col items-center p-6">
+    <div className="max-w-4xl mx-auto mt-10 flex items-start gap-8">
+      <div className="flex flex-col items-center">
         <img
           src={user.avatar}
           alt="Profile"
-          className="w-24 h-24 rounded-full object-cover"
+          className="w-48 h-48 rounded-full object-cover"
         />
-        <h3 className="mt-4 text-xl font-semibold text-gray-900">{user.name}</h3>
-        <p className="text-gray-500">{user.role}</p>
+         <button
+          onClick={() => handleEdit("profile picture")}
+          className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
+        >
+          Change Profile Picture
+        </button>
       </div>
-      <div className="divide-y">
-        <div className="flex items-center justify-between p-4">
-          <div>
-            <p className="text-sm font-medium text-gray-900">Change Email</p>
-            <p className="text-sm text-gray-500">{user.email}</p>
+      <div className="flex-1">
+        <h2 className="mb-6 text-2xl font-semibold text-gray-700">Manage Profile</h2>
+        <div className="rounded-lg bg-white shadow-md overflow-hidden">
+          <div className="p-6">
+            <h3 className="text-xl font-semibold text-gray-900">{user.name}</h3>
+            <p className="text-gray-500">{user.role}</p>
           </div>
-          <button
-            onClick={() => handleEdit("email")}
-            className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
-          >
-            Edit
-          </button>
-        </div>
-
-          <div className="flex items-center justify-between p-4">
-            <div>
-              <p className="text-sm font-medium text-gray-900">Change Phone Number</p>
-              <p className="text-sm text-gray-500">{user.phone}</p>
+          <div className="divide-y">
+            <div className="flex items-center justify-between p-4">
+              <div>
+                <p className="text-sm font-medium text-gray-900">Change Email</p>
+                <p className="text-sm text-gray-500">{user.email}</p>
+              </div>
+              <button
+                onClick={() => handleEdit("email")}
+                className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
+              >
+                Edit
+              </button>
             </div>
-            <button
-              onClick={() => handleEdit("phone")}
-              className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
-            >
-              Edit
-            </button>
-          </div>
-          <div className="flex items-center justify-between p-4">
-          <p className="text-sm font-medium text-gray-900">Change Password</p>
-          <button
-            onClick={() => handleEdit("password")}
-            className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
-          >
-            Edit
-          </button>
+            <div className="flex items-center justify-between p-4">
+              <div>
+                <p className="text-sm font-medium text-gray-900">Change Phone Number</p>
+                <p className="text-sm text-gray-500">{user.phone}</p>
+              </div>
+              <button
+                onClick={() => handleEdit("phone")}
+                className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
+              >
+                Edit
+              </button>
+            </div>
+            <div className="flex items-center justify-between p-4">
+              <p className="text-sm font-medium text-gray-900">Change Password</p>
+              <button
+                onClick={() => handleEdit("password")}
+                className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
+              >
+                Edit
+              </button>
+            </div> 
           </div>
         </div>
       </div>
