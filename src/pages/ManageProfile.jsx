@@ -38,9 +38,9 @@ const ManageProfile = () => {
           >
             Edit
           </button>
-          </div>
+        </div>
 
-          <div> className="flex items-center justify-between p-4">
+          <div className="flex items-center justify-between p-4">
             <div>
               <p className="text-sm font-medium text-gray-900">Change Phone Number</p>
               <p className="text-sm text-gray-500">{user.phone}</p>
@@ -53,13 +53,13 @@ const ManageProfile = () => {
             </button>
           </div>
           <div className="flex items-center justify-between p-4">
-            <p className="text-sm font-medium text-gray-900">Change Password</p>
-            <button
-              onClick={() => handleEdit("password")}
-              className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
-            >
-              Edit
-            </button>
+          <p className="text-sm font-medium text-gray-900">Change Password</p>
+          <button
+            onClick={() => handleEdit("password")}
+            className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
+          >
+            Edit
+          </button>
           </div>
         </div>
       </div>
