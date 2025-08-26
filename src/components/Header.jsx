@@ -1,6 +1,7 @@
 // src/components/Header.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import LogoutModal from "./LogoutModal";
 
 const Header = ({ onToggleSidebar }) => {
   const [showProfile, setShowProfile] = useState(false);
@@ -88,29 +89,13 @@ const Header = ({ onToggleSidebar }) => {
         </div>
       </div>
       {showLogoutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="rounded-lg bg-white p-6 shadow-lg">
-            <p className="mb-4 text-gray-700">Are you sure you want to log out?</p>
-            <div className="flex justify-end gap-2">
-              <button
-                className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                onClick={() => {
-                  setShowLogoutConfirm(false);
-                  // Perform actual logout logic here
-                  navigate("/");
-                }}
-              >
-                Logout
-              </button>
-              <button
-                className="rounded-md bg-gray-200 px-4 py-2 hover:bg-gray-300"
-                onClick={() => setShowLogoutConfirm(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <LogoutModal
+          onConfirm={() => {
+            setShowLogoutConfirm(false);
+            navigate("/");
+          }}
+          onCancel={() => setShowLogoutConfirm(false)}
+        />
       )}
     </header>
   );
