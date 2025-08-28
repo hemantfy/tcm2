@@ -6,6 +6,8 @@ const Dashboard = () => {
   const [tasks, _setTasks] = useState([]);
   const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [priorityFilter, setPriorityFilter] = useState('All Priorities');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
   const navigate = useNavigate();
@@ -25,10 +27,15 @@ const Dashboard = () => {
   const filteredTasks = tasks.filter(task => {
     const matchesStatus = statusFilter === 'All Statuses' || task.status === statusFilter;
     const matchesPriority = priorityFilter === 'All Priorities' || task.priority === priorityFilter;
+    const taskDate = new Date(task.createdDate);
+    const matchesDate = (
+      (!fromDate || taskDate >= new Date(fromDate)) &&
+      (!toDate || taskDate <= new Date(toDate))
+    );
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          task.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          task.assignee.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesPriority && matchesSearch;
+     return matchesStatus && matchesPriority && matchesDate && matchesSearch;
   });
 
   const handleAddTask = () => {
@@ -96,6 +103,22 @@ const Dashboard = () => {
               <option>Low</option>
             </select>
             <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 w-4 h-4" />
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-gray-700">From:</label>
+            <input
+              type="date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+            <label className="text-sm text-gray-700">To:</label>
+            <input
+              type="date"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
         </div>
         <input
