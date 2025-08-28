@@ -13,9 +13,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const parseDate = (dateString) => {
-    if (!dateString) return null;
-    const [day, month, year] = dateString.split('/');
-    return new Date(`${year}-${month}-${day}`);
+    return dateString ? new Date(dateString) : null;
   };
 
   const stats = {
@@ -115,16 +113,14 @@ const Dashboard = () => {
           <div className="flex items-center gap-2">
             <label className="text-sm text-gray-700">From:</label>
             <input
-               type="text"
-              placeholder="dd/mm/yyyy"
+              type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <label className="text-sm text-gray-700">To:</label>
             <input
-              type="text"
-              placeholder="dd/mm/yyyy"
+              type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
