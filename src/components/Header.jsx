@@ -44,7 +44,7 @@ const Header = ({ onToggleSidebar }) => {
         </button>
         <div className="flex items-center gap-2">
           <span className="text-2xl">🗂️</span>
-          <span className="text-lg font-semibold tracking-tight">DKT Task System</span>
+          <span className="text-lg font-semibold tracking-tight">TMS</span>
         </div>
 
         <div className="ml-auto flex items-center gap-3">
