@@ -114,6 +114,7 @@ const Dashboard = () => {
             <label className="text-sm text-gray-700">From:</label>
             <input
               type="date"
+              lang="en-GB"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -121,6 +122,7 @@ const Dashboard = () => {
             <label className="text-sm text-gray-700">To:</label>
             <input
               type="date"
+              lang="en-GB"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
