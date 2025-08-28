@@ -12,6 +12,12 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  const parseDate = (dateString) => {
+    if (!dateString) return null;
+    const [day, month, year] = dateString.split('/');
+    return new Date(`${year}-${month}-${day}`);
+  };
+
   const stats = {
     total: tasks.length,
     open: tasks.filter(task => task.status === 'Open').length,
@@ -28,9 +34,11 @@ const Dashboard = () => {
     const matchesStatus = statusFilter === 'All Statuses' || task.status === statusFilter;
     const matchesPriority = priorityFilter === 'All Priorities' || task.priority === priorityFilter;
     const taskDate = new Date(task.createdDate);
+    const from = parseDate(fromDate);
+    const to = parseDate(toDate);
     const matchesDate = (
-      (!fromDate || taskDate >= new Date(fromDate)) &&
-      (!toDate || taskDate <= new Date(toDate))
+      (!from || taskDate >= from) &&
+      (!to || taskDate <= to)
     );
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          task.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -107,14 +115,16 @@ const Dashboard = () => {
           <div className="flex items-center gap-2">
             <label className="text-sm text-gray-700">From:</label>
             <input
-              type="date"
+               type="text"
+              placeholder="dd/mm/yyyy"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <label className="text-sm text-gray-700">To:</label>
             <input
-              type="date"
+              type="text"
+              placeholder="dd/mm/yyyy"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
