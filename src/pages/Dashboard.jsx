@@ -50,19 +50,19 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fadeInUp">
           <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Total Tasks</h3>
           <span className="text-3xl font-bold text-gray-900">{stats.total}</span>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm  hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fadeInUp">
           <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Open</h3>
           <span className="text-3xl font-bold text-gray-900">{stats.open}</span>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm  hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fadeInUp">
           <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Overdue</h3>
           <span className="text-3xl font-bold text-red-600">{stats.overdue}</span>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm  hover:shadow-lg hover:-translate-y-1 transition-all duration-150 animate-fadeInUp">
           <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Done (This Week)</h3>
           <span className="text-3xl font-bold text-green-600">{stats.doneThisWeek}</span>
         </div>
