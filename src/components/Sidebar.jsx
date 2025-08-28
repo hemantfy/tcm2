@@ -28,9 +28,9 @@ export default function Sidebar({ open, current = "dashboard", navigate }) {
       `}
     >
       <div className="h-full flex flex-col pt-4 px-3 gap-2">
-      <Item id="dashboard" label="Dashboard" icon={<DashboardIcon />} />
-        <Item id="clients"   label="Clients"    icon={<ClientsIcon />} />
-        <Item id="employees" label="Employees"  icon={<EmployeesIcon />} />
+      <Item id="dashboard" label="Dashboard" icon={<LayoutDashboard className={iconCls} />} />
+        <Item id="clients"   label="Clients"    icon={<Users className={iconCls} />} />
+        <Item id="employees" label="Employees"  icon={<User className={iconCls} />} />
       </div>
     </aside>
   );
