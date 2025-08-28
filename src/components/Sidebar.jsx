@@ -7,14 +7,19 @@ export default function Sidebar({ open, current = "dashboard", navigate }) {
   const Item = ({ id, icon, label }) => (
     <button
       onClick={() => navigate?.(id)}
-      className={`flex items-center w-full px-3 py-2 rounded-full transition-colors
+       className={`flex items-center w-full px-3 py-2 rounded-full transition-all duration-300 ease-in-out
         text-gray-600 hover:text-blue-600 hover:bg-blue-50
         ${current === id ? "bg-blue-100 text-blue-700" : ""}
         ${open ? "gap-3" : "justify-center"}`}
       title={open ? undefined : label}
     >
       {icon}
-      {open && <span className="text-sm font-medium">{label}</span>}
+      <span
+        className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out
+          ${open ? "max-w-[140px] opacity-100" : "max-w-0 opacity-0"}`}
+      >
+        {label}
+      </span>
     </button>
   );
 
@@ -22,7 +27,7 @@ export default function Sidebar({ open, current = "dashboard", navigate }) {
     <aside
       className={`
         ${open ? "w-64" : "w-20"}
-        shrink-0 transition-[width] duration-200
+        shrink-0 overflow-hidden transition-all duration-300 ease-in-out
         bg-white shadow-md rounded-r-3xl
         text-gray-700
       `}
