@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 
 const Dashboard = () => {
   const [tasks, _setTasks] = useState([]);
@@ -70,26 +71,32 @@ const Dashboard = () => {
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div className="flex gap-3">
-          <select 
-            value={statusFilter} 
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option>All Statuses</option>
-            <option>Open</option>
-            <option>In Progress</option>
-            <option>Done</option>
-          </select>
-          <select 
-            value={priorityFilter} 
-            onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option>All Priorities</option>
-            <option>High</option>
-            <option>Medium</option>
-            <option>Low</option>
-          </select>
+        <div className="relative">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="appearance-none px-3 py-2 pr-8 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option>All Statuses</option>
+              <option>Open</option>
+              <option>In Progress</option>
+              <option>Done</option>
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 w-4 h-4" />
+          </div>
+          <div className="relative">
+            <select
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+              className="appearance-none px-3 py-2 pr-8 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option>All Priorities</option>
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 w-4 h-4" />
+          </div>
         </div>
         <input
           type="text"

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
 
 export default function TaskForm({ onAdd, employees = [], clients = [] }) {
   const [formData, setFormData] = useState({
@@ -102,30 +103,36 @@ export default function TaskForm({ onAdd, employees = [], clients = [] }) {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-          <select
-            name="priority"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={formData.priority}
-            onChange={handleChange}
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
+          <div className="relative">
+            <select
+              name="priority"
+              className="appearance-none w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={formData.priority}
+              onChange={handleChange}
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 w-4 h-4" />
+          </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-          <select
-            name="status"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={formData.status}
-            onChange={handleChange}
-          >
-            <option value="Open">Open</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Done">Done</option>
-          </select>
+          <div className="relative">
+            <select
+              name="status"
+              className="appearance-none w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={formData.status}
+              onChange={handleChange}
+            >
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 w-4 h-4" />
+          </div>
         </div>
 
         <div>
