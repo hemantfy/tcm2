@@ -101,31 +101,31 @@ const Dashboard = () => {
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div className="flex gap-3">
-        <div className="relative">
+         <div className="relative">
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="appearance-none px-3 py-2 pr-8 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="block w-full appearance-none rounded-lg bg-white px-3 py-2 pr-10 text-sm border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 [&::-ms-expand]:hidden"
             >
               <option>All Statuses</option>
               <option>Open</option>
               <option>In Progress</option>
               <option>Done</option>
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 w-4 h-4" />
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           </div>
           <div className="relative">
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="appearance-none px-3 py-2 pr-8 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="block w-full appearance-none rounded-lg bg-white px-3 py-2 pr-10 text-sm border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 [&::-ms-expand]:hidden"
             >
               <option>All Priorities</option>
               <option>High</option>
               <option>Medium</option>
               <option>Low</option>
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 w-4 h-4" />
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           </div>
           <div className="flex items-center gap-2">
             <label className="text-sm text-gray-700">From:</label>
