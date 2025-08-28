@@ -15,7 +15,7 @@ const ManageProfile = () => {
 
   return (
     <div className="max-w-4xl mx-auto mt-10 flex items-start gap-8">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center  mt-20 -ml-20">
         <img
           src={user.avatar}
           alt="Profile"
