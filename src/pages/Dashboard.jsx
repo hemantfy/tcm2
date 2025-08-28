@@ -13,30 +13,47 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const parseDate = (dateString) => {
-    return dateString ? new Date(dateString) : null;
+    if (!dateString) return null;
+    let day, month, year;
+    if (dateString.includes('/')) {
+      [day, month, year] = dateString.split('/').map(Number);
+    } else if (dateString.includes('-')) {
+      [year, month, day] = dateString.split('-').map(Number);
+    } else {
+      return null;
+    }
+    return new Date(year, month - 1, day);
+  };
+
+  const formatDate = (dateString) => {
+    const date = parseDate(dateString);
+    return date ? date.toLocaleDateString('en-GB') : '';
   };
 
   const stats = {
     total: tasks.length,
     open: tasks.filter(task => task.status === 'Open').length,
-    overdue: tasks.filter(task => new Date(task.due) < new Date() && task.status !== 'Done').length,
+    overdue: tasks.filter(task => {
+      const dueDate = parseDate(task.due);
+      return dueDate && dueDate < new Date() && task.status !== 'Done';
+    }).length,
     doneThisWeek: tasks.filter(task => {
-      const taskDate = new Date(task.completedDate);
+      const taskDate =  parseDate(task.completedDate);
       const weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
-      return task.status === 'Done' && taskDate >= weekAgo;
+      return task.status === 'Done' && taskDate && taskDate >= weekAgo;
     }).length
   };
 
   const filteredTasks = tasks.filter(task => {
     const matchesStatus = statusFilter === 'All Statuses' || task.status === statusFilter;
     const matchesPriority = priorityFilter === 'All Priorities' || task.priority === priorityFilter;
-    const taskDate = new Date(task.createdDate);
+    const taskDate = parseDate(task.dueDate);
     const from = parseDate(fromDate);
     const to = parseDate(toDate);
     const matchesDate = (
-      (!from || taskDate >= from) &&
-      (!to || taskDate <= to)
+        (!from || (taskDate && taskDate >= from)) &&
+      (!to || (taskDate && taskDate <= to))
     );
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          task.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -182,7 +199,7 @@ const Dashboard = () => {
                         {task.priority}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{task.due}</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">{formatDate(task.dueDate)}</td>
                   </tr>
                 ))
               )}
