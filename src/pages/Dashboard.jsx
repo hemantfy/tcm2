@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
+import WelcomeModal from '../components/WelcomeModal';
 
 const Dashboard = () => {
   const [tasks, _setTasks] = useState([]);
@@ -9,8 +10,13 @@ const Dashboard = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
 
   const navigate = useNavigate();
+
+  const handleCloseWelcomeModal = () => {
+    setShowWelcomeModal(false);
+  };
 
   const parseDate = (dateString) => {
     if (!dateString) return null;
@@ -66,7 +72,11 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <>
+      {showWelcomeModal && (
+        <WelcomeModal onClose={handleCloseWelcomeModal} />
+      )}
+      <div className="max-w-7xl mx-auto">
       <div className="flex justify-between items-start mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 mb-2">Task Management System</h1>
@@ -207,7 +217,8 @@ const Dashboard = () => {
           </table>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
