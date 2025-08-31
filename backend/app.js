@@ -9,6 +9,7 @@ require("dotenv").config()
 const cors = require("cors")
 
 const clientRouter = require("./routers/client.router")
+const employeeRouter = require("./routers/Employee.router")
 
 
 app.use(express.json())
@@ -34,6 +35,7 @@ app.get('/redoc', redoc({
 
 
 app.use("/api/clients" , clientRouter)
+app.use("/api/employees" , employeeRouter)
 
 
 app.get("/", (req , res)=>{

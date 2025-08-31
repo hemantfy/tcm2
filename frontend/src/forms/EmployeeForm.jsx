@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function EmployeeForm() {
   const navigate = useNavigate();
@@ -22,28 +23,25 @@ export default function EmployeeForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.firstName || !form.lastName || !form.email || !form.role) return;
     
-    const employee = {
-      ...form,
-      name: `${form.firstName} ${form.lastName}`,
-      id: Date.now(),
-      createdDate: new Date().toISOString().split('T')[0]
-    };
-    
-    console.log(employee);
-    setForm({
-      firstName: "",
-      lastName: "",
-      contact: "",
-      email: "",
-      role: "",
-      password: "",
-      isAdmin: false
-    });
-    navigate('/employees');
+    try {
+      await axios.post(`${import.meta.env.VITE_BACKEND}/api/employees`, form);
+      setForm({
+        firstName: "",
+        lastName: "",
+        contact: "",
+        email: "",
+        role: "",
+        password: "",
+        isAdmin: false
+      });
+      navigate('/employees');
+    } catch (error) {
+      console.error('Error creating employee:', error);
+    }
   };
 
 

@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const EmployeeProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  const employees = [
-    { id: 1, name: 'Alice Johnson', contact: '555-111-2222', email: 'alice.johnson@example.com', role: 'Manager', isAdmin: true, joinDate: '2023-01-15' },
-    { id: 2, name: 'Bob Williams', contact: '555-333-4444', email: 'bob.williams@example.com', role: 'Developer', isAdmin: false, joinDate: '2023-03-20' }
-  ];
-  
-  const employee = employees.find(e => e.id === parseInt(id)) || employees[0];
+  const [employee, setEmployee] = useState(null);
+
+  useEffect(() => {
+    fetchEmployee();
+  }, [id]);
+
+  const fetchEmployee = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND}/api/employees/${id}`);
+      setEmployee(response.data);
+    } catch (error) {
+      console.error('Error fetching employee:', error);
+    }
+  };
 
   const [documents, setDocuments] = useState([
     { id: 1, title: 'Employment Contract', fileName: 'contract.pdf', uploadDate: '2023-01-15' },
@@ -50,32 +58,36 @@ const EmployeeProfile = () => {
         <div className="lg:col-span-1">
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Employee Information</h2>
-            <div className="space-y-3">
-              <div>
-                <label className="text-sm font-medium text-gray-500">Name</label>
-                <p className="text-gray-900">{employee.name}</p>
+            {employee ? (
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Name</label>
+                  <p className="text-gray-900">{employee.name}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Contact</label>
+                  <p className="text-gray-900">{employee.contact || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Email</label>
+                  <p className="text-gray-900">{employee.email}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Role</label>
+                  <p className="text-gray-900">{employee.role}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Admin Access</label>
+                  <p className="text-gray-900">{employee.isAdmin ? 'Yes' : 'No'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Join Date</label>
+                  <p className="text-gray-900">{new Date(employee.createdAt).toLocaleDateString()}</p>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Contact</label>
-                <p className="text-gray-900">{employee.contact}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Email</label>
-                <p className="text-gray-900">{employee.email}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Role</label>
-                <p className="text-gray-900">{employee.role}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Admin Access</label>
-                <p className="text-gray-900">{employee.isAdmin ? 'Yes' : 'No'}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Join Date</label>
-                <p className="text-gray-900">{employee.joinDate}</p>
-              </div>
-            </div>
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
         </div>
 
