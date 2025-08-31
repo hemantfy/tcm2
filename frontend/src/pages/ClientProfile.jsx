@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const ClientProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  const clients = [
-    { id: 1, name: 'John Doe', contact: '555-123-4567', email: 'john.doe@example.com', address: '123 Main St, City, State', notes: 'Important client for our business' },
-    { id: 2, name: 'Jane Smith', contact: '555-987-6543', email: 'jane.smith@example.com', address: '456 Oak Ave, City, State', notes: 'Regular client' }
-  ];
-  
-  const client = clients.find(c => c.id === parseInt(id)) || clients[0];
+  const [client, setClient] = useState(null);
+
+  useEffect(() => {
+    fetchClient();
+  }, [id]);
+
+  const fetchClient = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND}/api/clients/${id}`);
+      setClient(response.data);
+    } catch (error) {
+      console.error('Error fetching client:', error);
+    }
+  };
 
   const [documents, setDocuments] = useState([
     { id: 1, title: 'Contract Agreement', fileName: 'contract.pdf', uploadDate: '2024-01-15' },
@@ -50,28 +58,32 @@ const ClientProfile = () => {
         <div className="lg:col-span-1">
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Client Information</h2>
-            <div className="space-y-3">
-              <div>
-                <label className="text-sm font-medium text-gray-500">Name</label>
-                <p className="text-gray-900">{client.name}</p>
+            {client ? (
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Name</label>
+                  <p className="text-gray-900">{client.name}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Contact</label>
+                  <p className="text-gray-900">{client.contact || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Email</label>
+                  <p className="text-gray-900">{client.email}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Address</label>
+                  <p className="text-gray-900">{client.address || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Notes</label>
+                  <p className="text-gray-900">{client.notes || 'N/A'}</p>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Contact</label>
-                <p className="text-gray-900">{client.contact}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Email</label>
-                <p className="text-gray-900">{client.email}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Address</label>
-                <p className="text-gray-900">{client.address}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Notes</label>
-                <p className="text-gray-900">{client.notes}</p>
-              </div>
-            </div>
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
         </div>
 

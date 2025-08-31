@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function ClientForm() {
   const [form, setForm] = useState({
@@ -23,30 +24,26 @@ export default function ClientForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.firstName || !form.lastName || !form.email) return;
     
-    const client = {
-      ...form,
-      name: `${form.firstName} ${form.lastName}`,
-      id: Date.now(),
-      createdDate: new Date().toISOString().split('T')[0]
-    };
-    
-    console.log(client);
-    setForm({
-      firstName: "",
-      lastName: "",
-      contact: "",
-      email: "",
-      address: "",
-      photo: null,
-      notes: "",
-      password: ""
-    });
-
-    navigate("/clients");
+    try {
+      await axios.post(`${import.meta.env.VITE_BACKEND}/api/clients`, form);
+      setForm({
+        firstName: "",
+        lastName: "",
+        contact: "",
+        email: "",
+        address: "",
+        photo: null,
+        notes: "",
+        password: ""
+      });
+      navigate("/clients");
+    } catch (error) {
+      console.error('Error creating client:', error);
+    }
   };
 
   return (

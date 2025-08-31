@@ -1,0 +1,126 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Task Manager API",
+    "description": "API documentation for Task Manager application",
+    "version": "1.0.0"
+  },
+  "host": "localhost:4000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/clients": {
+      "post": {
+        "tags": ["Clients"],
+        "summary": "Create a new client",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "Client data",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "firstName": { "type": "string", "example": "John" },
+              "lastName": { "type": "string", "example": "Doe" },
+              "email": { "type": "string", "example": "john.doe@example.com" },
+              "contact": { "type": "string", "example": "555-123-4567" },
+              "address": { "type": "string", "example": "123 Main St" },
+              "notes": { "type": "string", "example": "Important client" },
+              "password": { "type": "string", "example": "password123" }
+            },
+            "required": ["firstName", "lastName", "email", "password"]
+          }
+        }],
+        "responses": {
+          "201": { "description": "Client created successfully" },
+          "400": { "description": "Bad request" }
+        }
+      },
+      "get": {
+        "tags": ["Clients"],
+        "summary": "Get all clients",
+        "responses": {
+          "200": { "description": "List of clients" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/clients/{id}": {
+      "get": {
+        "tags": ["Clients"],
+        "summary": "Get client by ID",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "description": "Client ID",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": { "description": "Client data" },
+          "404": { "description": "Client not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "put": {
+        "tags": ["Clients"],
+        "summary": "Update client",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Client ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated client data",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": { "type": "string", "example": "John" },
+                "lastName": { "type": "string", "example": "Doe" },
+                "email": { "type": "string", "example": "john.doe@example.com" },
+                "contact": { "type": "string", "example": "555-123-4567" },
+                "address": { "type": "string", "example": "123 Main St" },
+                "notes": { "type": "string", "example": "Updated notes" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Client updated successfully" },
+          "404": { "description": "Client not found" },
+          "400": { "description": "Bad request" }
+        }
+      },
+      "delete": {
+        "tags": ["Clients"],
+        "summary": "Delete client",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "description": "Client ID",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": { "description": "Client deleted successfully" },
+          "404": { "description": "Client not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    }
+  }
+}
