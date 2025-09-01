@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Client = () => {
-  const [clients] = useState([
-    { id: 1, name: 'John Doe', contact: '555-123-4567', email: 'john.doe@example.com' },
-    { id: 2, name: 'Jane Smith', contact: '555-987-6543', email: 'jane.smith@example.com' }
-  ]);
+  const [clients, setClients] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchClients();
+  }, []);
+
+  const fetchClients = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND}/api/clients`);
+      setClients(response.data);
+    } catch (error) {
+      console.error('Error fetching clients:', error);
+    }
+  };
 
   const handleAddClient = () => {
     navigate('/add-clients');
@@ -39,7 +50,7 @@ const Client = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {clients.map((client) => (
-                <tr key={client.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/clients/${client.id}`)}>
+                <tr key={client._id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/clients/${client._id}`)}>
                   <td className="px-6 py-4 text-sm text-gray-900">{client.name}</td>
                   <td className="px-6 py-4 text-sm text-gray-900">{client.contact}</td>
                   <td className="px-6 py-4 text-sm text-gray-900">{client.email}</td>
