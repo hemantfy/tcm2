@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const ClientProfile = () => {
+const EmployeeProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  const clients = [
-    { id: 1, name: 'John Doe', contact: '555-123-4567', email: 'john.doe@example.com', address: '123 Main St, City, State', notes: 'Important client for our business' },
-    { id: 2, name: 'Jane Smith', contact: '555-987-6543', email: 'jane.smith@example.com', address: '456 Oak Ave, City, State', notes: 'Regular client' }
-  ];
-  
-  const client = clients.find(c => c.id === parseInt(id)) || clients[0];
+  const [employee, setEmployee] = useState(null);
+
+  useEffect(() => {
+    fetchEmployee();
+  }, [id]);
+
+  const fetchEmployee = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND}/api/employees/${id}`);
+      setEmployee(response.data);
+    } catch (error) {
+      console.error('Error fetching employee:', error);
+    }
+  };
 
   const [documents, setDocuments] = useState([
-    { id: 1, title: 'Contract Agreement', fileName: 'contract.pdf', uploadDate: '2024-01-15' },
-    { id: 2, title: 'Project Proposal', fileName: 'proposal.docx', uploadDate: '2024-01-10' }
+    { id: 1, title: 'Employment Contract', fileName: 'contract.pdf', uploadDate: '2023-01-15' },
+    { id: 2, title: 'Performance Review', fileName: 'review.docx', uploadDate: '2024-01-10' }
   ]);
 
   const [newDoc, setNewDoc] = useState({ title: '', file: null });
@@ -38,40 +46,48 @@ const ClientProfile = () => {
     <div className="max-w-7xl mx-auto">
       <div className="flex items-center gap-4 mb-8">
         <button 
-          onClick={() => navigate('/clients')}
+          onClick={() => navigate('/employees')}
           className="text-blue-600 hover:text-blue-800"
         >
-          ← Back to Clients
+          ← Back to Employees
         </button>
-        <h1 className="text-3xl font-semibold text-gray-900">Client Profile</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Employee Profile</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Client Information</h2>
-            <div className="space-y-3">
-              <div>
-                <label className="text-sm font-medium text-gray-500">Name</label>
-                <p className="text-gray-900">{client.name}</p>
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Employee Information</h2>
+            {employee ? (
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Name</label>
+                  <p className="text-gray-900">{employee.name}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Contact</label>
+                  <p className="text-gray-900">{employee.contact || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Email</label>
+                  <p className="text-gray-900">{employee.email}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Role</label>
+                  <p className="text-gray-900">{employee.role}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Admin Access</label>
+                  <p className="text-gray-900">{employee.isAdmin ? 'Yes' : 'No'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Join Date</label>
+                  <p className="text-gray-900">{new Date(employee.createdAt).toLocaleDateString()}</p>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Contact</label>
-                <p className="text-gray-900">{client.contact}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Email</label>
-                <p className="text-gray-900">{client.email}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Address</label>
-                <p className="text-gray-900">{client.address}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Notes</label>
-                <p className="text-gray-900">{client.notes}</p>
-              </div>
-            </div>
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
         </div>
 
@@ -131,4 +147,4 @@ const ClientProfile = () => {
   );
 };
 
-export default ClientProfile;
+export default EmployeeProfile;

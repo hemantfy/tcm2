@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, MapPin, Lock, FileText, Upload } from "lucide-react";
 import { Input, Textarea, LoadingButton } from "../components/ui/Form";
 import { PageLoading } from "../components/ui/Loading";
+import axios from "axios";
 
 export default function ClientForm() {
   const [form, setForm] = useState({
@@ -72,6 +73,22 @@ export default function ClientForm() {
     });
     setIsLoading(false);
     navigate("/clients");
+    try {
+      await axios.post(`${import.meta.env.VITE_BACKEND}/api/clients`, form);
+      setForm({
+        firstName: "",
+        lastName: "",
+        contact: "",
+        email: "",
+        address: "",
+        photo: null,
+        notes: "",
+        password: ""
+      });
+      navigate("/clients");
+    } catch (error) {
+      console.error('Error creating client:', error);
+    }
   };
 
   return (

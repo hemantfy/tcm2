@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Employees = () => {
   const navigate = useNavigate();
-  const [employees] = useState([
-    { id: 1, name: 'Alice Johnson', contact: '555-111-2222', email: 'alice.johnson@example.com', role: 'Manager' },
-    { id: 2, name: 'Bob Williams', contact: '555-333-4444', email: 'bob.williams@example.com', role: 'Developer' }
-  ]);
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND}/api/employees`);
+      setEmployees(response.data);
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+    }
+  };
 
   const handleAddEmployee = () => {
     navigate('/add-employees');
@@ -40,7 +51,7 @@ const Employees = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {employees.map((employee) => (
-                <tr key={employee.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/employees/${employee.id}`)}>
+                <tr key={employee._id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/employees/${employee._id}`)}>
                   <td className="px-6 py-4 text-sm text-gray-900">{employee.name}</td>
                   <td className="px-6 py-4 text-sm text-gray-900">{employee.contact}</td>
                   <td className="px-6 py-4 text-sm text-gray-900">{employee.email}</td>
