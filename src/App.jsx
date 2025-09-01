@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
@@ -7,6 +8,7 @@ import Client from './pages/Client';
 import ClientForm from './forms/ClientForm';
 import Employees from './pages/Employees';
 import TaskForm from './forms/TaskForm';
+import Documents from './pages/Documents';
 import './App.css';
 import EmployeeForm from './forms/EmployeeForm';
 import ClientProfile from "./pages/ClientProfile";
@@ -32,7 +34,7 @@ const AppContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header onToggleSidebar={handleToggleSidebar} />
       <div className="flex">
         <Sidebar 
@@ -50,10 +52,14 @@ const AppContent = () => {
             <Route path="/employees" element={<Employees />} />
             <Route path="/employees/:id" element={<EmployeeProfile />} />
             <Route path="/add-employees" element={<EmployeeForm />} />
-            <Route path="/documents" element={<div className="p-8 text-center text-gray-500">Documents page coming soon...</div>} />
+            <Route path="/documents" element={<Documents />} />
             <Route path="/taskform" element={<TaskForm />} />
             <Route path="/manage-profile" element={<ManageProfile />} />
-            
+            <Route path="/tasks" element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Tasks page coming soon...</div>} />
+            <Route path="/calendar" element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Calendar page coming soon...</div>} />
+            <Route path="/messages" element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Messages page coming soon...</div>} />
+            <Route path="/reports" element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Reports page coming soon...</div>} />
+            <Route path="/settings" element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Settings page coming soon...</div>} />
           </Routes>
         </main>
       </div>
@@ -63,9 +69,11 @@ const AppContent = () => {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </ThemeProvider>
   );
 }
 

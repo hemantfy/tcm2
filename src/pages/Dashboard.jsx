@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, TrendingUp, Users, CheckCircle, AlertCircle, Calendar, BarChart3 } from 'lucide-react';
+import { StatsCard, BarChart, LineChart, PieChart, ProgressBar } from '../components/ui/Charts';
+import { SearchInput, Select, DatePicker } from '../components/ui/Form';
+import { DataTable } from '../components/ui/DataTable';
 import WelcomeModal from '../components/WelcomeModal';
 
 const Dashboard = () => {
@@ -36,22 +39,99 @@ const Dashboard = () => {
     return date ? date.toLocaleDateString('en-GB') : '';
   };
 
+  // Enhanced mock data for better visualization
+  const mockTasks = [
+    { id: 1, title: 'Website Redesign', client: 'ABC Corp', assignee: 'John Doe', status: 'In Progress', priority: 'High', dueDate: '2024-01-20' },
+    { id: 2, title: 'Mobile App Testing', client: 'XYZ Ltd', assignee: 'Jane Smith', status: 'Open', priority: 'Medium', dueDate: '2024-01-25' },
+    { id: 3, title: 'Database Migration', client: 'Tech Solutions', assignee: 'Mike Johnson', status: 'Done', priority: 'High', dueDate: '2024-01-15' },
+    { id: 4, title: 'Security Audit', client: 'SecureCorp', assignee: 'Sarah Wilson', status: 'Open', priority: 'High', dueDate: '2024-01-18' },
+    { id: 5, title: 'Content Creation', client: 'Media Inc', assignee: 'Tom Brown', status: 'In Progress', priority: 'Low', dueDate: '2024-01-30' },
+  ];
+
+  const allTasks = tasks.length > 0 ? tasks : mockTasks;
+
   const stats = {
-    total: tasks.length,
-    open: tasks.filter(task => task.status === 'Open').length,
-    overdue: tasks.filter(task => {
-      const dueDate = parseDate(task.due);
+    total: allTasks.length,
+    open: allTasks.filter(task => task.status === 'Open').length,
+    inProgress: allTasks.filter(task => task.status === 'In Progress').length,
+    overdue: allTasks.filter(task => {
+      const dueDate = parseDate(task.dueDate);
       return dueDate && dueDate < new Date() && task.status !== 'Done';
     }).length,
-    doneThisWeek: tasks.filter(task => {
-      const taskDate =  parseDate(task.completedDate);
+    doneThisWeek: allTasks.filter(task => {
+      const taskDate = parseDate(task.completedDate);
       const weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
       return task.status === 'Done' && taskDate && taskDate >= weekAgo;
     }).length
   };
 
-  const filteredTasks = tasks.filter(task => {
+  // Chart data
+  const taskStatusData = [
+    { label: 'Open', value: stats.open, color: 'bg-blue-500' },
+    { label: 'In Progress', value: stats.inProgress, color: 'bg-yellow-500' },
+    { label: 'Done', value: allTasks.filter(t => t.status === 'Done').length, color: 'bg-green-500' },
+  ];
+
+  const priorityData = [
+    { label: 'High', value: allTasks.filter(t => t.priority === 'High').length },
+    { label: 'Medium', value: allTasks.filter(t => t.priority === 'Medium').length },
+    { label: 'Low', value: allTasks.filter(t => t.priority === 'Low').length },
+  ];
+
+  const weeklyProgressData = [
+    { label: 'Mon', value: 12 },
+    { label: 'Tue', value: 19 },
+    { label: 'Wed', value: 8 },
+    { label: 'Thu', value: 15 },
+    { label: 'Fri', value: 22 },
+    { label: 'Sat', value: 6 },
+    { label: 'Sun', value: 4 },
+  ];
+
+  // Table columns
+  const taskColumns = [
+    { header: 'Task', accessor: 'title', sortable: true },
+    { header: 'Client', accessor: 'client', sortable: true },
+    { header: 'Assignee', accessor: 'assignee', sortable: true },
+    { 
+      header: 'Status', 
+      accessor: 'status', 
+      type: 'badge',
+      badgeVariant: (value) => {
+        switch (value) {
+          case 'Open': return 'info';
+          case 'In Progress': return 'warning';
+          case 'Done': return 'success';
+          default: return 'default';
+        }
+      },
+      sortable: true 
+    },
+    { 
+      header: 'Priority', 
+      accessor: 'priority', 
+      type: 'badge',
+      badgeVariant: (value) => {
+        switch (value) {
+          case 'High': return 'error';
+          case 'Medium': return 'warning';
+          case 'Low': return 'default';
+          default: return 'default';
+        }
+      },
+      sortable: true 
+    },
+    { header: 'Due Date', accessor: 'dueDate', type: 'date', sortable: true },
+  ];
+
+  const taskActions = [
+    { label: 'View', onClick: (row) => console.log('View task:', row) },
+    { label: 'Edit', onClick: (row) => console.log('Edit task:', row) },
+    { label: 'Delete', onClick: (row) => console.log('Delete task:', row) },
+  ];
+
+  const filteredTasks = allTasks.filter(task => {
     const matchesStatus = statusFilter === 'All Statuses' || task.status === statusFilter;
     const matchesPriority = priorityFilter === 'All Priorities' || task.priority === priorityFilter;
     const taskDate = parseDate(task.dueDate);
@@ -90,132 +170,104 @@ const Dashboard = () => {
         </button>
       </div>
 
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fadeInUp">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Total Tasks</h3>
-          <span className="text-3xl font-bold text-gray-900">{stats.total}</span>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm  hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fadeInUp">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Open</h3>
-          <span className="text-3xl font-bold text-gray-900">{stats.open}</span>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm  hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fadeInUp">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Overdue</h3>
-          <span className="text-3xl font-bold text-red-600">{stats.overdue}</span>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm  hover:shadow-lg hover:-translate-y-1 transition-all duration-150 animate-fadeInUp">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Done (This Week)</h3>
-          <span className="text-3xl font-bold text-green-600">{stats.doneThisWeek}</span>
-        </div>
-      </div>
-
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <div className="flex gap-3">
-         <div className="relative">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="block w-full appearance-none rounded-lg bg-white px-3 py-2 pr-10 text-sm border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 [&::-ms-expand]:hidden"
-            >
-              <option>All Statuses</option>
-              <option>Open</option>
-              <option>In Progress</option>
-              <option>Done</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-          </div>
-          <div className="relative">
-            <select
-              value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
-              className="block w-full appearance-none rounded-lg bg-white px-3 py-2 pr-10 text-sm border border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 [&::-ms-expand]:hidden"
-            >
-              <option>All Priorities</option>
-              <option>High</option>
-              <option>Medium</option>
-              <option>Low</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-700">From:</label>
-            <input
-              type="date"
-              lang="en-GB"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-            <label className="text-sm text-gray-700">To:</label>
-            <input
-              type="date"
-              lang="en-GB"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-        </div>
-        <input
-          type="text"
-          placeholder="Search by title, client, assignee…"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full md:w-80"
+        <StatsCard 
+          title="Total Tasks" 
+          value={stats.total} 
+          change={12}
+          changeType="positive"
+          icon={BarChart3}
+        />
+        <StatsCard 
+          title="Open Tasks" 
+          value={stats.open} 
+          change={-5}
+          changeType="negative"
+          icon={AlertCircle}
+        />
+        <StatsCard 
+          title="In Progress" 
+          value={stats.inProgress} 
+          change={8}
+          changeType="positive"
+          icon={TrendingUp}
+        />
+        <StatsCard 
+          title="Completed" 
+          value={allTasks.filter(t => t.status === 'Done').length} 
+          change={15}
+          changeType="positive"
+          icon={CheckCircle}
         />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Title</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Client</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Assignee</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Priority</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Due</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {filteredTasks.length === 0 ? (
-                <tr>
-                  <td colSpan="6" className="px-6 py-12 text-center text-gray-500 italic">
-                    No tasks match your filters.
-                  </td>
-                </tr>
-              ) : (
-                filteredTasks.map((task, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-900">{task.title}</td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{task.client}</td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{task.assignee}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                        task.status === 'Open' ? 'bg-blue-100 text-blue-800' :
-                        task.status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {task.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                        task.priority === 'High' ? 'bg-red-100 text-red-800' :
-                        task.priority === 'Medium' ? 'bg-orange-100 text-orange-800' :
-                        'bg-purple-100 text-purple-800'
-                      }`}>
-                        {task.priority}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{formatDate(task.dueDate)}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="lg:col-span-2">
+          <LineChart 
+            title="Weekly Task Completion"
+            data={weeklyProgressData}
+            yAxisLabel="Tasks Completed"
+            xAxisLabel="Days of Week"
+          />
         </div>
+        <div>
+          <PieChart 
+            title="Task Priority Distribution"
+            data={priorityData}
+          />
+        </div>
+      </div>
+
+      {/* Progress Bars */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 mb-8">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Project Progress</h3>
+        <div className="space-y-4">
+          <ProgressBar 
+            label="Website Redesign" 
+            value={75} 
+            color="blue"
+          />
+          <ProgressBar 
+            label="Mobile App Development" 
+            value={45} 
+            color="green"
+          />
+          <ProgressBar 
+            label="Database Migration" 
+            value={90} 
+            color="purple"
+          />
+          <ProgressBar 
+            label="Security Audit" 
+            value={30} 
+            color="yellow"
+          />
+        </div>
+      </div>
+
+      {/* Status Overview Chart */}
+      <div className="mb-8">
+        <BarChart 
+          title="Task Status Overview"
+          data={taskStatusData}
+        />
+      </div>
+
+      {/* Enhanced Task Table */}
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Tasks</h3>
+        <DataTable 
+          data={filteredTasks}
+          columns={taskColumns}
+          actions={taskActions}
+          searchable={true}
+          sortable={true}
+          paginated={true}
+          pageSize={10}
+          emptyMessage="No tasks found. Create a new task to get started."
+        />
       </div>
       </div>
     </>

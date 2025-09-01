@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { User, Mail, Phone, MapPin, Lock, FileText, Upload } from "lucide-react";
+import { Input, Textarea, LoadingButton } from "../components/ui/Form";
+import { PageLoading } from "../components/ui/Loading";
 
 export default function ClientForm() {
   const [form, setForm] = useState({
@@ -12,6 +15,8 @@ export default function ClientForm() {
     notes: "",
     password: ""
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -23,9 +28,29 @@ export default function ClientForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.firstName.trim()) newErrors.firstName = "First name is required";
+    if (!form.lastName.trim()) newErrors.lastName = "Last name is required";
+    if (!form.email.trim()) newErrors.email = "Email is required";
+    if (form.email && !/\S+@\S+\.\S+/.test(form.email)) {
+      newErrors.email = "Email is invalid";
+    }
+    if (form.contact && !/^[\d\s\-\+\(\)]+$/.test(form.contact)) {
+      newErrors.contact = "Contact number is invalid";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.firstName || !form.lastName || !form.email) return;
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
     
     const client = {
       ...form,
@@ -34,7 +59,7 @@ export default function ClientForm() {
       createdDate: new Date().toISOString().split('T')[0]
     };
     
-    console.log(client);
+    console.log('New client:', client);
     setForm({
       firstName: "",
       lastName: "",
@@ -45,128 +70,158 @@ export default function ClientForm() {
       notes: "",
       password: ""
     });
-
+    setIsLoading(false);
     navigate("/clients");
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm w-full max-w-2xl">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Add Client</h2>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-          <input
-            type="text"
-            name="firstName"
-            placeholder="Enter first name"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={form.firstName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Enter last name"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={form.lastName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
-          <input
-            type="tel"
-            name="contact"
-            placeholder="Enter contact number"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={form.contact}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter email address"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-          <input
-            type="text"
-            name="address"
-            placeholder="Enter address"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={form.address}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Photo</label>
-          <input
-            type="file"
-            name="photo"
-            accept="image/*"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter password"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={form.password}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-          <textarea
-            name="notes"
-            placeholder="Enter notes"
-            rows="3"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={form.notes}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="md:col-span-2 flex justify-end gap-3 mt-4">
-          <button
-            type="button"
-            onClick={() => {navigate("/clients");}}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-          >
-            Save Client
-          </button>
-        </div>
-      </form>
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2">Add New Client</h1>
+        <p className="text-gray-600 dark:text-gray-400">Create a new client profile with their basic information and contact details.</p>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Personal Information */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input
+                label="First Name"
+                name="firstName"
+                placeholder="Enter first name"
+                value={form.firstName}
+                onChange={handleChange}
+                error={errors.firstName}
+                required
+                icon={User}
+              />
+              
+              <Input
+                label="Last Name"
+                name="lastName"
+                placeholder="Enter last name"
+                value={form.lastName}
+                onChange={handleChange}
+                error={errors.lastName}
+                required
+                icon={User}
+              />
+            </div>
+          </div>
+
+          {/* Contact Information */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contact Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input
+                label="Email Address"
+                type="email"
+                name="email"
+                placeholder="Enter email address"
+                value={form.email}
+                onChange={handleChange}
+                error={errors.email}
+                required
+                icon={Mail}
+              />
+              
+              <Input
+                label="Contact Number"
+                type="tel"
+                name="contact"
+                placeholder="Enter contact number"
+                value={form.contact}
+                onChange={handleChange}
+                error={errors.contact}
+                icon={Phone}
+              />
+            </div>
+            
+            <div className="mt-6">
+              <Input
+                label="Address"
+                name="address"
+                placeholder="Enter full address"
+                value={form.address}
+                onChange={handleChange}
+                icon={MapPin}
+              />
+            </div>
+          </div>
+
+          {/* Account Information */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Account Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input
+                label="Password"
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                value={form.password}
+                onChange={handleChange}
+                icon={Lock}
+              />
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Profile Photo
+                </label>
+                <div className="relative">
+                  <div className="flex items-center justify-center w-full h-12 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
+                    <input
+                      type="file"
+                      name="photo"
+                      accept="image/*"
+                      onChange={handleChange}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+                      <Upload className="h-4 w-4" />
+                      <span className="text-sm">Upload Photo</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Information */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Additional Information</h3>
+            <Textarea
+              label="Notes"
+              name="notes"
+              placeholder="Add any additional notes about the client..."
+              rows={4}
+              value={form.notes}
+              onChange={handleChange}
+              icon={FileText}
+            />
+          </div>
+          
+          {/* Form Actions */}
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <button
+              type="button"
+              onClick={() => navigate("/clients")}
+              disabled={isLoading}
+              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Cancel
+            </button>
+            <LoadingButton
+              type="submit"
+              isLoading={isLoading}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            >
+              {isLoading ? 'Creating Client...' : 'Create Client'}
+            </LoadingButton>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
