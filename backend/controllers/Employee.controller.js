@@ -15,7 +15,8 @@ const createEmployee = async (req, res) => {
         contact: '555-123-4567',
         role: 'Developer',
         password: 'password123',
-        isAdmin: false
+        isAdmin: false,
+        photo: 'https://example.com/photo.jpg'
       }
     }
     #swagger.responses[201] = { description: 'Employee created successfully' }
@@ -76,7 +77,8 @@ const updateEmployee = async (req, res) => {
         email: 'john.doe@example.com',
         contact: '555-123-4567',
         role: 'Manager',
-        isAdmin: true
+        isAdmin: true,
+        photo: 'https://example.com/photo.jpg'
       }
     }
     #swagger.responses[200] = { description: 'Employee updated successfully' }

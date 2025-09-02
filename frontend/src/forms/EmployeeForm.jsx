@@ -12,8 +12,10 @@ export default function EmployeeForm() {
     email: "",
     role: "",
     password: "",
+    photo: "",
     isAdmin: false
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -36,11 +38,16 @@ export default function EmployeeForm() {
         email: "",
         role: "",
         password: "",
+        photo: "",
         isAdmin: false
       });
       navigate('/employees');
     } catch (error) {
-      console.error('Error creating employee:', error);
+      if (error.response?.data?.error?.includes('duplicate key error') && error.response.data.error.includes('email')) {
+        setErrorMessage('Email already exists. Please use a different email address.');
+      } else {
+        setErrorMessage('Failed to create employee. Please try again.');
+      }
     }
   };
 
@@ -49,6 +56,19 @@ export default function EmployeeForm() {
 
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm w-full max-w-2xl">
+      {errorMessage && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-center">
+            <div className="text-red-600 text-sm font-medium">{errorMessage}</div>
+            <button 
+              onClick={() => setErrorMessage('')}
+              className="ml-auto text-red-600 hover:text-red-800"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
       <h2 className="text-xl font-semibold text-gray-900 mb-6">Add Employee</h2>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -128,6 +148,18 @@ export default function EmployeeForm() {
             placeholder="Enter password"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             value={form.password}
+            onChange={handleChange}
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Profile Photo URL</label>
+          <input
+            type="url"
+            name="photo"
+            placeholder="Enter image URL"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={form.photo}
             onChange={handleChange}
           />
         </div>

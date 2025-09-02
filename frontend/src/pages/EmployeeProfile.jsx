@@ -59,7 +59,18 @@ const EmployeeProfile = () => {
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Employee Information</h2>
             {employee ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
+                {employee.photo && (
+                  <div className="flex justify-center mb-4">
+                    <img 
+                      src={employee.photo} 
+                      alt={employee.name}
+                      className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                      onError={(e) => e.target.style.display = 'none'}
+                    />
+                  </div>
+                )}
+                <div className="space-y-3">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Name</label>
                   <p className="text-gray-900">{employee.name}</p>
@@ -83,6 +94,7 @@ const EmployeeProfile = () => {
                 <div>
                   <label className="text-sm font-medium text-gray-500">Join Date</label>
                   <p className="text-gray-900">{new Date(employee.createdAt).toLocaleDateString()}</p>
+                </div>
                 </div>
               </div>
             ) : (

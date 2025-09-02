@@ -59,7 +59,18 @@ const ClientProfile = () => {
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Client Information</h2>
             {client ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
+                {client.photo && (
+                  <div className="flex justify-center mb-4">
+                    <img 
+                      src={client.photo} 
+                      alt={client.name}
+                      className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                      onError={(e) => e.target.style.display = 'none'}
+                    />
+                  </div>
+                )}
+                <div className="space-y-3">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Name</label>
                   <p className="text-gray-900">{client.name}</p>
@@ -79,6 +90,7 @@ const ClientProfile = () => {
                 <div>
                   <label className="text-sm font-medium text-gray-500">Notes</label>
                   <p className="text-gray-900">{client.notes || 'N/A'}</p>
+                </div>
                 </div>
               </div>
             ) : (

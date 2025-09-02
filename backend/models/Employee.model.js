@@ -37,6 +37,10 @@ const employeeSchema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: false
+  },
+  photo: {
+    type: String,
+    trim: true
   }
 }, {
   timestamps: true

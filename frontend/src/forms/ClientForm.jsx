@@ -12,20 +12,21 @@ export default function ClientForm() {
     contact: "",
     email: "",
     address: "",
-    photo: null,
+    photo: "",
     notes: "",
     password: ""
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
+    const { name, value } = e.target;
     setForm((prev) => ({ 
       ...prev, 
-      [name]: type === 'file' ? files[0] : value 
+      [name]: value 
     }));
   };
 
@@ -67,12 +68,11 @@ export default function ClientForm() {
       contact: "",
       email: "",
       address: "",
-      photo: null,
+      photo: "",
       notes: "",
       password: ""
     });
     setIsLoading(false);
-    navigate("/clients");
     try {
       await axios.post(`${import.meta.env.VITE_BACKEND}/api/clients`, form);
       setForm({
@@ -81,13 +81,19 @@ export default function ClientForm() {
         contact: "",
         email: "",
         address: "",
-        photo: null,
+        photo: "",
         notes: "",
         password: ""
       });
       navigate("/clients");
     } catch (error) {
-      console.error('Error creating client:', error);
+      if (error.response?.data?.error?.includes('duplicate key error') && error.response.data.error.includes('email')) {
+        setErrorMessage('Email already exists. Please use a different email address.');
+      } else {
+        setErrorMessage('Failed to create client. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,6 +105,19 @@ export default function ClientForm() {
       </div>
 
       <div className="bg-white dark:bg-gray-800 p-8 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        {errorMessage && (
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="flex items-center">
+              <div className="text-red-600 dark:text-red-400 text-sm font-medium">{errorMessage}</div>
+              <button 
+                onClick={() => setErrorMessage('')}
+                className="ml-auto text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Personal Information */}
           <div>
@@ -182,26 +201,15 @@ export default function ClientForm() {
                 icon={Lock}
               />
               
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Profile Photo
-                </label>
-                <div className="relative">
-                  <div className="flex items-center justify-center w-full h-12 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
-                    <input
-                      type="file"
-                      name="photo"
-                      accept="image/*"
-                      onChange={handleChange}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
-                    <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
-                      <Upload className="h-4 w-4" />
-                      <span className="text-sm">Upload Photo</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Input
+                label="Profile Photo URL"
+                type="url"
+                name="photo"
+                placeholder="Enter image URL"
+                value={form.photo}
+                onChange={handleChange}
+                icon={Upload}
+              />
             </div>
           </div>
 
